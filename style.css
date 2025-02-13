@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.calc {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(239, 239, 242, 0.74);
+    height: 100vh;
+}
+
+.calc-container{
+    width: 300px;
+    background-color: rgb(243, 236, 236) ;
+    padding: 1rem;
+    box-shadow: -5px -5px 6px rgba(24, 8, 8, 0.637);
+    border-radius: 4%;
+}
+
+.display{
+    background-color: rgb(40, 40, 40);
+    border-radius: 3%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.result{
+    height: 5rem;
+    border: none;
+    padding: 10px 6px 2px;
+    font-size: 40px;
+    color: #e6dede;
+    display:flex;
+    flex-direction: column;
+    align-items: end;
+    text-wrap: wrap;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+.addFunc{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    color:white;
+    cursor: pointer;
+    padding: 0rem 1rem 0.5rem 0.8rem;
+}
+
+button{
+    border: none;
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    border-radius: 40%;
+    background: transparent;
+    color: black;
+    font-size: 20px;
+    box-shadow: -5px -5px 6px rgba(15, 4, 4, 0.637);
+    cursor: pointer;
+    background: #fffbfb;
+}
+
+button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+    background-color: #ccc;
+}
+
+#equal{
+    background-color: #fb7c14;
+}
+
+.operator{
+    color: #0f9cbb;
+}
