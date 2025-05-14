@@ -2,15 +2,10 @@ const expressionDisplay = document.querySelector("#expression p");
 const resultDisplay = document.querySelector("#value p");
 const buttons = document.querySelectorAll(".button, .operator");
 const clearButton = document.getElementById("clear");
-const toggleButton = document.getElementById("toggle");
-const percentButton = document.getElementById("percent");
-const bracketButton = document.getElementById("brackets");
-const deleteButton = document.getElementById("delete-btn");
+const deleteButton = document.querySelector("#delete-btn");
 
 let expression = "";
 let result = "";
-let openBrackets = 0;
-let history = [];
 
 function updateDisplay() {
   // console.log("Updating Display:", expression, result);
@@ -24,7 +19,7 @@ function updateDisplay() {
     expressionDisplay.style.fontSize = "12px";
   }
   else {
-    expressionDisplay.style.fontSize = "16x";
+    expressionDisplay.style.fontSize = "16px";
   }
 
   if (result.length > 12) {
@@ -41,11 +36,19 @@ buttons.forEach((button) => {
       evaluateExpression();
     }
     else {
-      if (result !== "0" || result !== "") {
-        expression += result;
+      // If there's a result and we're starting a new calculation
+      if (result !== "0" && result !== "") {
+        expression = result;
         result = "";
       }
-      expression += value;
+      
+      // Prevent multiple operators in sequence
+      if ("+-*/".includes(value) && "+-*/".includes(expression[expression.length - 1])) {
+        expression = expression.slice(0, -1) + value;
+      } else {
+        expression += value;
+      }
+      
       updateDisplay();
     }
   });
@@ -57,42 +60,11 @@ clearButton.addEventListener("click", function () {
   updateDisplay();
 });
 
-toggleButton.addEventListener("click", function () {
-  if (expression.length > 0) {
-    if (expression.startsWith("-")) {
-      expression = expression.slice(1);
-    } else {
-      expression = "-" + expression;
-    }
-    updateDisplay();
-  }
-});
-
 deleteButton.addEventListener("click", function () {
-  expression = expression.slice(0, expression.length - 1);
-  updateDisplay();
-});
-
-percentButton.addEventListener("click", function () {
-  if (expression !== "") {
-    expression = (parseFloat(expression) / 100).toString();
-    updateDisplay();
-  }
-});
-
-bracketButton.addEventListener("click", function () {
-  if (
-    expression === "" ||
-    "+-*/(".includes(expression[expression.length - 1])
-  ) {
-    expression += "(";
-    openBrackets++;
-  } else if (openBrackets > 0) {
-    expression += ")";
-    openBrackets--;
-  } else {
-    expression += "(";
-    openBrackets++;
+  if (result !== "") {
+    result = "";
+  } else if (expression.length > 0) {
+    expression = expression.slice(0, expression.length - 1);
   }
   updateDisplay();
 });
@@ -100,13 +72,31 @@ bracketButton.addEventListener("click", function () {
 function evaluateExpression() {
   try {
     if (expression.trim() === "") return;
+    console.log("Evaluating expression:", expression);
+    
     if (expression.includes("/0")) {
       throw new Error("Cannot divide by zero");
     }
+    
+    // Check if the expression ends with an operator
+    if ("+-*/".includes(expression[expression.length - 1])) {
+      throw new Error("Invalid expression");
+    }
+    
     result = eval(expression);
+    console.log("Result:", result);
+    
+    // Handle very small numbers
+    if (Math.abs(result) < 1e-10) {
+      result = "0";
+    } else {
+      result = result.toString();
+    }
+    
     expression = "";
   }
   catch (error) {
+    console.error("Error:", error);
     result = "Error !";
     expression = "";
   }
